@@ -15,8 +15,6 @@ app.use(bodyparser.urlencoded({ extended: false }));
 //enable CORS -> Cross Origine Resource Sharing -> communication among various
 let login = require("./routes/login");
 
-app.use("/login", login);
-
 app.use(cors());
 //connect to mongodb
 mongoose.connect(url, { dbName: "capstone" }).then(
@@ -31,9 +29,12 @@ mongoose.connect(url, { dbName: "capstone" }).then(
 //import routes
 const productRoutes = require("./routes/productRoutes");
 const userRoutes = require("./routes/userRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 //use routes
-app.use("/", productRoutes);
-app.use("/", userRoutes);
+app.use("/login", login);
+app.use("/products", productRoutes);
+app.use("/users", userRoutes);
+app.use("/cart", cartRoutes);
 //create port
 let port = process.env.port || 8080;
 //assign port no

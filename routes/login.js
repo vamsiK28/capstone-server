@@ -8,6 +8,10 @@ const mongoose = require("mongoose");
 // Import url
 const url = require("../url");
 const User = require("../model/User");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+const SECRET_KEY = process.env.SECRET_KEY || "lfdghdfngdfklngkjdsngskjdbgjk";
 
 // Create router instance
 let router = express.Router();
@@ -25,17 +29,37 @@ router.get("/", (req, res) => {
 
 // Create POST API for /login
 router.post("/", async (req, res) => {
+  console.log("inside login");
   try {
     // Get the request body
     let obj = req.body;
 
     // Find user in the database
-    let users = await User.find(obj).exec();
+    let users = await User.find({ u_name: obj.uname }).exec();
+    console.log(users);
 
     if (users.length > 0) {
-      console.log("Auth Success");
-      let myToken = token(obj, new Date().toString());
-      res.json({ auth: "success", token: myToken });
+      try {
+        bcrypt.compare(obj.upwd, users[0].u_pwd, function (err, result) {
+          // result == true
+          console.log(err, result);
+          if (err) {
+            console.log("Auth Failed");
+            res.json({ auth: "failed" });
+          } else if (result) {
+            let myToken = jwt.sign(
+              {
+                data: users[0],
+              },
+              SECRET_KEY,
+              { expiresIn: "24h" }
+            );
+            res.json({ auth: "success", token: myToken });
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       console.log("Auth Failed");
       res.json({ auth: "failed" });
