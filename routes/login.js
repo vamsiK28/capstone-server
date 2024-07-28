@@ -11,7 +11,7 @@ const User = require("../model/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const SECRET_KEY = process.env.SECRET_KEY || "lfdghdfngdfklngkjdsngskjdbgjk";
+const SECRET_KEY = require("../secret_key");
 
 // Create router instance
 let router = express.Router();
