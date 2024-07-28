@@ -4,7 +4,7 @@ const User = require("../model/User");
 const users_all = async (req, res) => {
   try {
     const users = await User.find();
-    console.log("Data sent");
+    //console.log("Data sent");
     res.json(users);
   } catch (error) {
     console.log("Fetch error :- ", error);
@@ -23,7 +23,7 @@ const insert_user = async (req, res) => {
   });
   try {
     const savedUser = await user.save();
-    console.log("User inserted");
+    //console.log("User inserted");
     res.send(savedUser);
   } catch (error) {
     res.status(400).send(error);
@@ -42,7 +42,7 @@ const update_user = async (req, res) => {
   try {
     const updateUser = await User.updateOne({ u_id }, user);
     if (updateUser.modifiedCount != 0) {
-      console.log("User Updated", updateUser);
+      //console.log("User Updated", updateUser);
       res.send({ update: "success" });
     } else {
       console.log("User not updated");
@@ -59,7 +59,7 @@ const delete_user = async (req, res) => {
   try {
     const deleteduser = await User.deleteOne({ u_id });
     if (deleteduser.deletedCount != 0) {
-      console.log("User Deleted");
+      //console.log("User Deleted");
       res.send({ delete: "success" });
     } else {
       console.log("User Not deleted");
